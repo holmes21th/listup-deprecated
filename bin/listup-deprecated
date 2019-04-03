@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+'use strict'
+
+const loadJsonFile = require('load-json-file');
+
+loadJsonFile('package.json').then(json => {
+  const dependencies = json.dependencies
+  const devDependencies = json.devDependencies || {}
+
+  console.log(" >> dependencies ----")
+  for (let key in dependencies) {
+    console.log(" >>   ", key)
+  }
+  console.log(" >> devDependencies ----")
+  for (let key in devDependencies) {
+    console.log(" >>   ", key)
+  }
+  console.log(" >> ----")
+})
