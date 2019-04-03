@@ -1,0 +1,28 @@
+{
+  "name": "listup-deprecated",
+  "version": "0.0.1",
+  "description": "listup deprecated npm modules",
+  "bin": {
+    "listup-deprecated": "bin/listup-deprecated"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/holmes21th/listup-deprecated.git"
+  },
+  "keywords": [
+    "npm",
+    "deprecated"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/holmes21th/listup-deprecated/issues"
+  },
+  "homepage": "https://github.com/holmes21th/listup-deprecated#readme",
+  "dependencies": {
+    "load-json-file": "^5.2.0"
+  }
+}
