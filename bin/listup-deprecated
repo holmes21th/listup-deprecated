@@ -2,18 +2,49 @@
 'use strict'
 
 const loadJsonFile = require('load-json-file');
+const repoUrl = require('get-repository-url');
+const rp = require('request-promise');
+const cheerio = require('cheerio');
 
-loadJsonFile('package.json').then(json => {
-  const dependencies = json.dependencies
-  const devDependencies = json.devDependencies || {}
+(async () => {
+  console.log('Searching...')
 
-  console.log(" >> dependencies ----")
-  for (let key in dependencies) {
-    console.log(" >>   ", key)
-  }
-  console.log(" >> devDependencies ----")
-  for (let key in devDependencies) {
-    console.log(" >>   ", key)
-  }
-  console.log(" >> ----")
-})
+  const json = await loadJsonFile('package.json');
+
+  const options = {
+    transform: (body) => {
+      return cheerio.load(body);
+    }
+  };
+
+  const dependenciesKeyList = [
+    `dependencies`,
+    `devDependencies`,
+    `peerDependencies`,
+    `bundledDependencies`,
+    `optionalDependencies`,
+  ]
+
+  await Promise.all(dependenciesKeyList.map(async dependenciesKey => {
+    const dependencies = json[dependenciesKey] || {}
+    // パッケージ名リスト生成
+    let packageNameList = []
+    for (let packageName in dependencies) {
+      packageNameList.push(packageName)
+    }
+    await Promise.all(packageNameList.map(async packageName => {
+      // パッケージ名リスト生成
+      const packageRepoUrl = await repoUrl(packageName);
+      // リポジトリページ取得
+      const $result = await rp.get(packageRepoUrl, options);
+      // GitHub は #readme らしい
+      const readme = $result('#readme').text();
+      // 検索文言は要調整
+      const isDeprecatedResult = readme.match(/Deprecated/);
+      const isDeprecated = isDeprecatedResult !== null
+
+      if (isDeprecated)
+        console.log(`  [${dependenciesKey}] ${packageName} is Deprecated...`);
+    }))
+  }))
+})()

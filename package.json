@@ -23,6 +23,10 @@
   },
   "homepage": "https://github.com/holmes21th/listup-deprecated#readme",
   "dependencies": {
-    "load-json-file": "^5.2.0"
+    "cheerio": "^1.0.0-rc.3",
+    "get-repository-url": "^2.0.0",
+    "load-json-file": "^5.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   }
 }
